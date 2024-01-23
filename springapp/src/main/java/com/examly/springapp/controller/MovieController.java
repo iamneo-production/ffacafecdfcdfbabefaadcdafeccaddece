@@ -19,7 +19,7 @@ import com.examly.springapp.service.MovieService;
 import com.examly.springapp.service.UserService;
 
 @RestController
-// @RequestMapping("/admin")
+@RequestMapping("/admin")
 
 public class MovieController {
     @Autowired

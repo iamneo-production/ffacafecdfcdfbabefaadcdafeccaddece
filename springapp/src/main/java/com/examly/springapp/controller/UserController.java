@@ -11,7 +11,7 @@ import com.examly.springapp.model.User;
 import com.examly.springapp.service.UserService;
 
 @RestController
-@RequestMapping("/admin")
+// @RequestMapping("/admin")
 
 public class UserController {
     @Autowired
