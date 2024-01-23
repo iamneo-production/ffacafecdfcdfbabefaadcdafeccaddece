@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +20,9 @@ import com.examly.springapp.security.JwtUtil;
 import com.examly.springapp.service.UserService;
 
 @RestController
-@RequestMapping("api/auth")
+@RequestMapping("/api/auth")
+@CrossOrigin(origins = "http://localhost:3000/", allowedHeaders = "*")
+
 public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;

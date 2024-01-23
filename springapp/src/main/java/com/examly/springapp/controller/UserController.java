@@ -11,13 +11,13 @@ import com.examly.springapp.model.User;
 import com.examly.springapp.service.UserService;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/admin")
 
 public class UserController {
     @Autowired
     UserService userservice;
 
-    @GetMapping("/users")
+    @GetMapping("/api/users")
     public List<User> getalluser() {
         return userservice.getAllUser();
     }

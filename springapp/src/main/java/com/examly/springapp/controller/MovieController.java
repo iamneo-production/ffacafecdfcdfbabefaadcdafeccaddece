@@ -19,7 +19,7 @@ import com.examly.springapp.service.MovieService;
 import com.examly.springapp.service.UserService;
 
 @RestController
-@RequestMapping("/api")
+// @RequestMapping("/admin")
 
 public class MovieController {
     @Autowired
@@ -28,36 +28,36 @@ public class MovieController {
     @Autowired
     UserService userService;
 
-    @PostMapping("/movie")
+    @PostMapping("/api/movie")
     public Movie addMovie(@RequestBody Movie movie, @RequestParam Long userId) {
         User user = userService.getUserById(userId);
         movie.setUser(user);
         return movieService.addMovie(movie);
     }
 
-    @GetMapping("/movie/{id}")
+    @GetMapping("/api/movie/{id}")
     public Movie getMovieById(@PathVariable Long id) {
         return movieService.getMovieById(id);
     }
 
-    @DeleteMapping("/movie/{id}")
+    @DeleteMapping("/api/movie/{id}")
     public boolean deleteMovieById(@PathVariable Long id) {
         return movieService.deleteMovieById(id);
     }
 
-    @PutMapping("/movie/{id}")
+    @PutMapping("/api/movie/{id}")
     public Movie updateMovieById(@PathVariable Long id, @RequestBody Movie updatedMovie) {
         return movieService.updateMovieById(id, updatedMovie);
     }
 
-    @GetMapping("/movie/user/{userId}")
+    @GetMapping("/api/movie/user/{userId}")
     public List<Movie> getMoviesByUserIdAndSearchValue(
             @PathVariable Long userId,
             @RequestParam(required = false) String searchValue) {
         return movieService.getMoviesByUserIdAndSearchValue(userId, searchValue);
     }
 
-    @GetMapping("/movies")
+    @GetMapping("/api/movies")
     public List<Movie> getAllMovies(
             @RequestParam(name = "sortOrder", defaultValue = "asc") String sortOrder,
             @RequestParam(name = "searchValue", required = false) String searchValue) {
