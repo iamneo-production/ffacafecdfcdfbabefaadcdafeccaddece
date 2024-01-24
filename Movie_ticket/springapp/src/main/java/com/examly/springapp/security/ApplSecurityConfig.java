@@ -35,7 +35,8 @@ public class ApplSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .cors()
-                .and().authorizeRequests()
+                .and()
+                .authorizeHttpRequests()
                 .antMatchers("/api/auth/login").permitAll()
                 .antMatchers("/api/auth/register").permitAll()
                 .and().authorizeHttpRequests().antMatchers("/api/users", "/api/movies").permitAll()
