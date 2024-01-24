@@ -73,7 +73,7 @@ public class MovieController {
         return movieService.getMoviesByUserIdAndSearchValue(userId, searchValue);
     }
 
-    @GetMapping("/api/movies")
+    @GetMapping("/api/movie")
     public List<Movie> getAllMovies(
             @RequestParam(name = "sortOrder", defaultValue = "asc") String sortOrder,
             @RequestParam(name = "searchValue", required = false) String searchValue) {

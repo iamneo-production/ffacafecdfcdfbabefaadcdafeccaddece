@@ -39,7 +39,7 @@ public class ApplSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeHttpRequests()
                 .antMatchers("/api/auth/login").permitAll()
                 .antMatchers("/api/auth/register").permitAll()
-                .and().authorizeHttpRequests().antMatchers("/api/users", "/api/movies").permitAll()
+                .and().authorizeHttpRequests().antMatchers("/api/users", "/api/movie").permitAll()
                 .and().authorizeHttpRequests().antMatchers("/api/movie/***").permitAll()
                 .anyRequest().authenticated().and().formLogin().and().httpBasic()
                 .and().logout((logout) -> logout.permitAll())
