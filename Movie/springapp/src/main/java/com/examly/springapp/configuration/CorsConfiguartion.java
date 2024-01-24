@@ -29,7 +29,7 @@ public class CorsConfiguartion implements WebMvcConfigurer {
 		registry.addMapping("/**") // URL patterns to apply CORS configuration
 				// .allowedOrigins("https://8081-dffafdafedbdcbadebfefaccdcffceeecaffac.premiumproject.examly.io")
 				// // Allowed origin URLs
-				.allowedOrigins("http://localhost:8081")
+				.allowedOrigins("http://localhost:3000")
 				.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Allowed HTTP methods
 				.allowedHeaders("*") // Allowed headers
 				.allowCredentials(true);
