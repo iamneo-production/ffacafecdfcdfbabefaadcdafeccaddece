@@ -12,14 +12,11 @@ import com.examly.springapp.model.User;
 import com.examly.springapp.service.UserService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
-
 public class UserController {
     @Autowired
     UserService userservice;
 
     @GetMapping("/api/users")
-    @CrossOrigin(origins = "http://localhost:3000")
     public List<User> getalluser() {
         return userservice.getAllUser();
     }

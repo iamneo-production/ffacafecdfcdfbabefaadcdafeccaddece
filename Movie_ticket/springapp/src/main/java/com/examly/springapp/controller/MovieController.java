@@ -20,9 +20,6 @@ import com.examly.springapp.service.MovieService;
 import com.examly.springapp.service.UserService;
 
 @RestController
-// questMapping("/admin")
-@CrossOrigin(origins = "http://localhost:3000")
-
 public class MovieController {
     @Autowired
     MovieService movieService;
@@ -31,7 +28,6 @@ public class MovieController {
     UserService userService;
 
     @PostMapping("/api/movie")
-    @CrossOrigin(origins = "http://localhost:3000")
     public ApiResponse addMovie(@RequestBody Movie movie, @RequestParam Long userId) {
         User user = userService.getUserById(userId);
         movie.setUser(user);
@@ -46,13 +42,11 @@ public class MovieController {
     }
 
     @GetMapping("/api/movie/{id}")
-    @CrossOrigin(origins = "http://localhost:3000")
     public Movie getMovieById(@PathVariable Long id) {
         return movieService.getMovieById(id);
     }
 
     @DeleteMapping("/api/movie/{id}")
-    @CrossOrigin(origins = "http://localhost:3000")
     public String deleteMovieById(@PathVariable Long id) {
         boolean result = movieService.deleteMovieById(id);
         if (result) {
@@ -63,7 +57,6 @@ public class MovieController {
     }
 
     @PutMapping("/api/movie/{id}")
-    @CrossOrigin(origins = "http://localhost:3000")
     public String updateMovieById(@PathVariable Long id, @RequestBody Movie updatedMovie) {
         Movie result = movieService.updateMovieById(id, updatedMovie);
         if (result != null) {
@@ -74,7 +67,6 @@ public class MovieController {
     }
 
     @GetMapping("/api/movie/user/{userId}")
-    @CrossOrigin(origins = "http://localhost:3000")
     public List<Movie> getMoviesByUserIdAndSearchValue(
             @PathVariable Long userId,
             @RequestParam(required = false) String searchValue) {
@@ -82,7 +74,6 @@ public class MovieController {
     }
 
     @GetMapping("/api/movies")
-    @CrossOrigin(origins = "http://localhost:3000")
     public List<Movie> getAllMovies(
             @RequestParam(name = "sortOrder", defaultValue = "asc") String sortOrder,
             @RequestParam(name = "searchValue", required = false) String searchValue) {

@@ -26,13 +26,11 @@ public class CorsConfiguartion implements WebMvcConfigurer {
 
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
-		registry.addMapping("/**") // URL patterns to apply CORS configuration
-				// .allowedOrigins("https://8081-dffafdafedbdcbadebfefaccdcffceeecaffac.premiumproject.examly.io")
-				// // Allowed origin URLs
-				.allowedOrigins("http://localhost:3000")
-				.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Allowed HTTP methods
-				.allowedHeaders("*") // Allowed headers
-				.allowCredentials(true);
+		registry.addMapping("/**")
+            .allowedOriginPatterns("*") // Allow access from any origin
+            .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+            .allowedHeaders("*")
+            .allowCredentials(true);
 	}
 
 }
