@@ -21,7 +21,7 @@ import com.examly.springapp.service.UserService;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin(origins = "http://localhost:3000")
 
 public class AuthController {
     @Autowired
@@ -44,7 +44,7 @@ public class AuthController {
     }
 
     @PostMapping("/auth/login")
-    @CrossOrigin(origins = "http://localhost:8081")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<User> handler2(@RequestBody User user) throws Exception {
 
         try {

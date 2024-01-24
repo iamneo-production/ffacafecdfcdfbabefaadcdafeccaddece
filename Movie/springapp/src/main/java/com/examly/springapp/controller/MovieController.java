@@ -21,7 +21,7 @@ import com.examly.springapp.service.UserService;
 
 @RestController
 // questMapping("/admin")
-@CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin(origins = "http://localhost:3000")
 
 public class MovieController {
     @Autowired
