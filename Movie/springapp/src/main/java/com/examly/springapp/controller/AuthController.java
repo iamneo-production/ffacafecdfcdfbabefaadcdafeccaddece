@@ -34,7 +34,7 @@ public class AuthController {
     private UserService userService;
 
     @PostMapping("/auth/register")
-    @CrossOrigin(origins = "http://localhost:8081")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ApiResponse registerUser(@RequestBody User user) {
         if (userService.registerUser(user)) {
             return new ApiResponse("success");
