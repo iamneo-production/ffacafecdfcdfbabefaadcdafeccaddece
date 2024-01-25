@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -93,6 +94,7 @@ public class Movie {
         this.movieId = movieId;
     }
 
+    @Lob
     private String coverImage;
 
     public String getCoverImage() {
