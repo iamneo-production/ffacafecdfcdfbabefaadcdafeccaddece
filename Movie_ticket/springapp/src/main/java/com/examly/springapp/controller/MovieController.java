@@ -20,6 +20,9 @@ import com.examly.springapp.service.MovieService;
 import com.examly.springapp.service.UserService;
 
 @RestController
+// questMapping("/admin")
+@CrossOrigin(origins = "http://localhost:8081")
+
 public class MovieController {
     @Autowired
     MovieService movieService;
@@ -28,6 +31,7 @@ public class MovieController {
     UserService userService;
 
     @PostMapping("/api/movie")
+    @CrossOrigin(origins = "http://localhost:8081")
     public ApiResponse addMovie(@RequestBody Movie movie, @RequestParam Long userId) {
         User user = userService.getUserById(userId);
         movie.setUser(user);
@@ -42,38 +46,45 @@ public class MovieController {
     }
 
     @GetMapping("/api/movie/{id}")
+    @CrossOrigin(origins = "http://localhost:8081")
     public Movie getMovieById(@PathVariable Long id) {
         return movieService.getMovieById(id);
     }
 
     @DeleteMapping("/api/movie/{id}")
-    public String deleteMovieById(@PathVariable Long id) {
+    @CrossOrigin(origins = "http://localhost:8081")
+    public ApiResponse deleteMovieById(@PathVariable Long id) {
         boolean result = movieService.deleteMovieById(id);
+
         if (result) {
-            return "Movie deleted successfully";
+            return new ApiResponse("Movie deleted successfully");
         } else {
-            return "Movie not found or could not be deleted";
+            return new ApiResponse("Movie not found or could not be deleted");
         }
     }
 
     @PutMapping("/api/movie/{id}")
-    public String updateMovieById(@PathVariable Long id, @RequestBody Movie updatedMovie) {
+    @CrossOrigin(origins = "http://localhost:8081")
+    public ApiResponse updateMovieById(@PathVariable Long id, @RequestBody Movie updatedMovie) {
         Movie result = movieService.updateMovieById(id, updatedMovie);
+
         if (result != null) {
-            return "Movie updated successfully";
+            return new ApiResponse("Movie updated successfully");
         } else {
-            return "Movie not found or could not be updated";
+            return new ApiResponse("Movie not found or could not be updated");
         }
     }
 
     @GetMapping("/api/movie/user/{userId}")
+    @CrossOrigin(origins = "http://localhost:8081")
     public List<Movie> getMoviesByUserIdAndSearchValue(
             @PathVariable Long userId,
             @RequestParam(required = false) String searchValue) {
         return movieService.getMoviesByUserIdAndSearchValue(userId, searchValue);
     }
 
-    @GetMapping("/api/movie")
+    @GetMapping("/api/movies")
+    @CrossOrigin(origins = "http://localhost:8081")
     public List<Movie> getAllMovies(
             @RequestParam(name = "sortOrder", defaultValue = "asc") String sortOrder,
             @RequestParam(name = "searchValue", required = false) String searchValue) {

@@ -28,16 +28,31 @@ public class MovieService {
         return movierepo.findById(id).orElse(null);
     }
 
+    // public boolean deleteMovieById(Long id) {
+    // Optional<Movie> optionalMovie = movierepo.findById(id);
+    // if (optionalMovie.isPresent()) {
+    // Movie movie = optionalMovie.get();
+
+    // // If the movie has a user, delete the user
+    // User user = movie.getUser();
+    // if (user != null) {
+    // userRepo.deleteById(user.getUserId());
+    // }
+
+    // // Now delete the movie
+    // movierepo.deleteById(id);
+    // return true;
+    // }
+    // return false;
+    // }
+
     public boolean deleteMovieById(Long id) {
         Optional<Movie> optionalMovie = movierepo.findById(id);
         if (optionalMovie.isPresent()) {
             Movie movie = optionalMovie.get();
 
-            // If the movie has a user, delete the user
-            User user = movie.getUser();
-            if (user != null) {
-                userRepo.deleteById(user.getId());
-            }
+            // Remove the association with the user
+            movie.setUser(null);
 
             // Now delete the movie
             movierepo.deleteById(id);
@@ -60,7 +75,7 @@ public class MovieService {
     // }
 
     public List<Movie> getMoviesByUserId(Long userId) {
-        return movierepo.findByUser_Id(userId);
+        return movierepo.findByUser_UserId(userId);
     }
 
     // search and sort
@@ -84,7 +99,7 @@ public class MovieService {
 
     public List<Movie> getMoviesByUserIdAndSearchValue(Long userId, String searchValue) {
         System.out.println("userId: " + userId + ", searchValue: " + searchValue);
-        return movierepo.findByUser_IdAndMovieNameContainingIgnoreCase(userId, searchValue);
+        return movierepo.findByUser_UserIdAndMovieNameContainingIgnoreCase(userId, searchValue);
     }
 
 }

@@ -8,12 +8,14 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 // User.java
 @Entity
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long userId;
 
     @NotBlank
     private String firstName;
@@ -94,12 +96,29 @@ public class User {
 
     private String token;
 
-    public Long getId() {
-        return id;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public User() {
+        // default constructor
+    }
+
+    public User(Long userId, @NotBlank String firstName, @NotBlank String lastName,
+            @NotBlank @Size(min = 10, max = 10) String mobileNumber, @NotBlank @Email String email,
+            @NotBlank String role, @NotBlank @Size(min = 8, max = 32) String password, String token) {
+        this.userId = userId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.mobileNumber = mobileNumber;
+        this.email = email;
+        this.role = role;
+        this.password = password;
+        this.token = token;
     }
 
 }

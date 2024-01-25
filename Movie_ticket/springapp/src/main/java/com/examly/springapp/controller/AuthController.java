@@ -15,12 +15,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.examly.springapp.model.ApiResponse;
+import com.examly.springapp.model.LoginResponse;
 import com.examly.springapp.model.User;
 import com.examly.springapp.security.JwtUtil;
 import com.examly.springapp.service.UserService;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(origins = "http://localhost:3000")
+
 public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
@@ -32,6 +35,7 @@ public class AuthController {
     private UserService userService;
 
     @PostMapping("/auth/register")
+
     public ApiResponse registerUser(@RequestBody User user) {
         if (userService.registerUser(user)) {
             return new ApiResponse("success");
@@ -41,8 +45,7 @@ public class AuthController {
     }
 
     @PostMapping("/auth/login")
-    public ResponseEntity<User> handler2(@RequestBody User user) throws Exception {
-
+    public ResponseEntity<LoginResponse> handler2(@RequestBody User user) throws Exception {
         try {
             this.authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
@@ -57,11 +60,14 @@ public class AuthController {
         if (loggedInUser != null) {
             String token = jwtUtil.generateToken(userDetails);
 
-            // Include the full user object in the response
-            // loggedInUser.setPassword(null); // Exclude password for security
-            loggedInUser.setToken(token);
-
-            return new ResponseEntity<>(loggedInUser, HttpStatus.OK);
+            // Create a custom response object with specific fields
+            LoginResponse loginResponse = new LoginResponse();
+            loginResponse.setUserId(loggedInUser.getUserId());
+            loginResponse.setFirstName(loggedInUser.getFirstName());
+            loginResponse.setLastName(loggedInUser.getLastName());
+            loginResponse.setRole(loggedInUser.getRole());
+            loginResponse.setToken(token);
+            return new ResponseEntity<>(loginResponse, HttpStatus.OK);
         } else {
             throw new EntityNotFoundException("User not found with email: " + user.getEmail());
         }

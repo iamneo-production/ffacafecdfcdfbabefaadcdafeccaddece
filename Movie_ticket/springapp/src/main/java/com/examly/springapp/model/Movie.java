@@ -1,5 +1,10 @@
 package com.examly.springapp.model;
 
+import java.sql.Date;
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,6 +15,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 // Movie.java
 @Entity
@@ -34,28 +46,12 @@ public class Movie {
         this.movieType = movieType;
     }
 
-    public Integer getSeats() {
-        return seats;
-    }
-
-    public void setSeats(Integer seats) {
-        this.seats = seats;
-    }
-
     public Double getTicketRate() {
         return ticketRate;
     }
 
     public void setTicketRate(Double ticketRate) {
         this.ticketRate = ticketRate;
-    }
-
-    public String getReleaseDate() {
-        return releaseDate;
-    }
-
-    public void setReleaseDate(String releaseDate) {
-        this.releaseDate = releaseDate;
     }
 
     public User getUser() {
@@ -72,17 +68,21 @@ public class Movie {
     @NotBlank(message = "Movie type is required")
     private String movieType;
 
-    @NotNull(message = "No of Seats is required")
-    private Integer seats;
+    @NotNull(message = "noOfTicketsAvailable is required")
+    private Integer noOfTicketsAvailable;
 
     @NotNull(message = "Ticket Rate is required")
     private Double ticketRate;
 
-    @NotBlank(message = "Release Date is required")
-    private String releaseDate;
+    @NotBlank(message = "date is required")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+
+    private LocalDate showDate;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
     public Long getMovieId() {
@@ -103,5 +103,32 @@ public class Movie {
         this.coverImage = coverImage;
     }
 
-    // Getters and setters
+    public Integer getNoOfTicketsAvailable() {
+        return noOfTicketsAvailable;
+    }
+
+    public void setNoOfTicketsAvailable(Integer noOfTicketsAvailable) {
+        this.noOfTicketsAvailable = noOfTicketsAvailable;
+    }
+
+    private Time showTime;
+
+    public Time getShowTime() {
+        return showTime;
+    }
+
+    public void setShowTime(Time showTime) {
+        this.showTime = showTime;
+    }
+
+    public LocalDate getShowDate() {
+        return showDate;
+    }
+
+    public void setShowDate(LocalDate showDate) {
+        this.showDate = showDate;
+    }
+
 }
+
+// Getters and setters
