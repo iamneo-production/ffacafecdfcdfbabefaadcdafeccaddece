@@ -39,7 +39,7 @@ public class ApplSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/auth/login").permitAll()
                 .antMatchers("/api/auth/register").permitAll()
                 .antMatchers("/api/users", "/api/movies").permitAll()
-                .antMatchers("/api/movie/***", "/api/movie","/api/movie/user/**").permitAll()
+                .antMatchers("/api/movie/***", "/api/movie", "/api/movie/user/***").permitAll()
                 .anyRequest().authenticated().and().formLogin().and().httpBasic()
                 .and().logout((logout) -> logout.permitAll())
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

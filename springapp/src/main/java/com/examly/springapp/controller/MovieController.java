@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.examly.springapp.model.ApiResponse;
 import com.examly.springapp.model.Movie;
+import com.examly.springapp.model.MovieDTO;
 import com.examly.springapp.model.User;
 import com.examly.springapp.service.MovieService;
 import com.examly.springapp.service.UserService;
@@ -30,13 +31,33 @@ public class MovieController {
     @Autowired
     UserService userService;
 
+    // @PostMapping("/api/movie")
+    // @CrossOrigin(origins = "http://localhost:8081")
+    // public ApiResponse addMovie(@RequestBody Movie movie, @RequestParam Long
+    // userId) {
+    // User user = userService.getUserById(userId);
+    // movie.setUser(user);
+
+    // Movie addedMovie = movieService.addMovie(movie);
+
+    // if (addedMovie != null) {
+    // return new ApiResponse("Movie added successfully");
+    // } else {
+    // return new ApiResponse("Failed to add movie");
+    // }
+    // }
     @PostMapping("/api/movie")
     @CrossOrigin(origins = "http://localhost:8081")
     public ApiResponse addMovie(@RequestBody Movie movie, @RequestParam Long userId) {
         User user = userService.getUserById(userId);
+
+        if (user == null) {
+            return new ApiResponse("Failed to add movie. User not found.");
+        }
+
         movie.setUser(user);
 
-        Movie addedMovie = movieService.addMovie(movie);
+        Movie addedMovie = movieService.addMovie(movie, userId);
 
         if (addedMovie != null) {
             return new ApiResponse("Movie added successfully");
@@ -85,10 +106,11 @@ public class MovieController {
 
     @GetMapping("/api/movies")
     @CrossOrigin(origins = "http://localhost:8081")
-    public List<Movie> getAllMovies(
+    public List<MovieDTO> getAllMovies(
             @RequestParam(name = "sortOrder", defaultValue = "asc") String sortOrder,
             @RequestParam(name = "searchValue", required = false) String searchValue) {
 
         return movieService.getAllMovies(sortOrder, searchValue);
     }
+
 }

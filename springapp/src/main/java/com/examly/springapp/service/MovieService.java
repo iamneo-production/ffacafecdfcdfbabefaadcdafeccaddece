@@ -2,12 +2,14 @@ package com.examly.springapp.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.examly.springapp.model.Movie;
+import com.examly.springapp.model.MovieDTO;
 import com.examly.springapp.model.User;
 import com.examly.springapp.respository.MovieRepository;
 import com.examly.springapp.respository.UserRepository;
@@ -19,9 +21,24 @@ public class MovieService {
     MovieRepository movierepo;
     @Autowired
     UserRepository userRepo;
+    @Autowired
+    UserService userService;
 
-    public Movie addMovie(Movie movie) {
-        return movierepo.save(movie);
+    // public Movie addMovie(Movie movie) {
+    // return movierepo.save(movie);
+    // }
+    public Movie addMovie(Movie movie, Long userId) {
+        User user = userService.getUserById(userId);
+
+        if (user != null) {
+            movie.setUser(user);
+            return movierepo.save(movie);
+        } else {
+            // Handle the case when the user is not found
+            // You can throw an exception, return null, or handle it according to your
+            // requirements.
+            return null;
+        }
     }
 
     public Movie getMovieById(Long id) {
@@ -61,10 +78,28 @@ public class MovieService {
         return false;
     }
 
+    // public Movie updateMovieById(Long id, Movie updatedMovie) {
+    // if (movierepo.existsById(id)) {
+    // updatedMovie.setMovieId(id);
+    // return movierepo.save(updatedMovie);
+    // }
+    // return null;
+    // }
     public Movie updateMovieById(Long id, Movie updatedMovie) {
         if (movierepo.existsById(id)) {
-            updatedMovie.setMovieId(id);
-            return movierepo.save(updatedMovie);
+            // Retrieve the existing movie
+            Movie existingMovie = movierepo.findById(id).orElse(null);
+
+            if (existingMovie != null) {
+                // Set the user association to the updated movie
+                updatedMovie.setUser(existingMovie.getUser());
+
+                // Set the movieId to ensure it's the same as the existing one
+                updatedMovie.setMovieId(id);
+
+                // Save the updated movie
+                return movierepo.save(updatedMovie);
+            }
         }
         return null;
     }
@@ -79,14 +114,36 @@ public class MovieService {
     }
 
     // search and sort
-    public List<Movie> getAllMovies(String sortOrder, String searchValue) {
+    public List<MovieDTO> getAllMovies(String sortOrder, String searchValue) {
         Sort sort = getSortObject(sortOrder, "movieName");
+        List<Movie> movies;
 
         if (searchValue != null && !searchValue.isEmpty()) {
-            return movierepo.findByMovieNameContainingIgnoreCase(searchValue, sort);
+            movies = movierepo.findByMovieNameContainingIgnoreCase(searchValue, sort);
         } else {
-            return movierepo.findAll(sort);
+            movies = movierepo.findAll(sort);
         }
+
+        return movies.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
+    private MovieDTO convertToDTO(Movie movie) {
+        MovieDTO dto = new MovieDTO();
+        dto.setMovieId(movie.getMovieId());
+        dto.setMovieName(movie.getMovieName());
+        dto.setMovieType(movie.getMovieType());
+        dto.setTicketRate(movie.getTicketRate());
+        dto.setNoOfTicketsAvailable(movie.getNoOfTicketsAvailable());
+        dto.setShowDate(movie.getShowDate());
+        dto.setShowTime(movie.getShowTime());
+        dto.setCoverImage(movie.getCoverImage());
+
+        // Add a null check for the User object
+        if (movie.getUser() != null) {
+            dto.setUserId(movie.getUser().getUserId());
+        }
+
+        return dto;
     }
 
     private Sort getSortObject(String sortOrder, String sortBy) {
