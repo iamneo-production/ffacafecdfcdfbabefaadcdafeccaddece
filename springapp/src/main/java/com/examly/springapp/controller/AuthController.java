@@ -45,21 +45,25 @@ public class AuthController {
     }
 
     @PostMapping("/auth/login")
-    public ResponseEntity<LoginResponse> handler2(@RequestBody User user) throws Exception {
+    public ResponseEntity<?> handler2(@RequestBody User user) {
         try {
-            this.authenticationManager
-                    .authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new Exception("Bad credentials");
+            this.authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword())
+            );
+        } catch (BadCredentialsException e) {
+            // Invalid email or password
+            return new ResponseEntity<>(new ApiResponse("Invalid email or password"), HttpStatus.OK);
+        } catch (AuthenticationException e) {
+            // Other authentication exceptions
+            return new ResponseEntity<>(new ApiResponse("Authentication failed"), HttpStatus.OK);
         }
-
+ 
         UserDetails userDetails = this.userService.loadUserByUsername(user.getEmail());
         User loggedInUser = userService.getUserByEmail(user.getEmail());
-
+ 
         if (loggedInUser != null) {
             String token = jwtUtil.generateToken(userDetails);
-
+ 
             // Create a custom response object with specific fields
             LoginResponse loginResponse = new LoginResponse();
             loginResponse.setUserId(loggedInUser.getUserId());
