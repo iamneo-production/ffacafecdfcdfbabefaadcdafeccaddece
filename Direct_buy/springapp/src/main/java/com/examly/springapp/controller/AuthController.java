@@ -24,6 +24,8 @@ import com.examly.springapp.service.UserService;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(origins = "http://localhost:3000")
+
 public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
@@ -35,6 +37,7 @@ public class AuthController {
     private UserService userService;
 
     @PostMapping("/auth/register")
+
     public ApiResponse registerUser(@RequestBody User user) {
         if (userService.registerUser(user)) {
             return new ApiResponse("success");
@@ -49,7 +52,7 @@ public class AuthController {
             this.authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
         } catch (BadCredentialsException e) {
-            // e.printStackTrace();
+            e.printStackTrace();
             return new ResponseEntity<>(new ApiResponse("Invalid email or password"), HttpStatus.UNAUTHORIZED);
         } catch (EntityNotFoundException e) {
             e.printStackTrace();
