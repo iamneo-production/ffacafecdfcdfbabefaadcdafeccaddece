@@ -49,7 +49,7 @@ public class AuthController {
             this.authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
         } catch (BadCredentialsException e) {
-            e.printStackTrace();
+            // e.printStackTrace();
             return new ResponseEntity<>(new ApiResponse("Invalid email or password"), HttpStatus.UNAUTHORIZED);
         } catch (EntityNotFoundException e) {
             e.printStackTrace();
