@@ -9,7 +9,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.examly.springapp.model.Movie;
 import com.examly.springapp.model.User;
 import com.examly.springapp.respository.UserRepository;
 

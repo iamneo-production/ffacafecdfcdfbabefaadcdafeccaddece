@@ -15,14 +15,11 @@ import com.examly.springapp.model.UserResponse;
 import com.examly.springapp.service.UserService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8081")
-
 public class UserController {
     @Autowired
     UserService userservice;
 
     @GetMapping("/api/users")
-    @CrossOrigin(origins = "http://localhost:8081")
     public List<UserResponse> getalluser() {
         List<User> users = userservice.getAllUser();
         List<UserResponse> responseList = new ArrayList<>();

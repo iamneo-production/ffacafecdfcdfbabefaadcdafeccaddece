@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,8 +24,6 @@ import com.examly.springapp.service.UserService;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:3000")
-
 public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
@@ -35,7 +35,6 @@ public class AuthController {
     private UserService userService;
 
     @PostMapping("/auth/register")
-
     public ApiResponse registerUser(@RequestBody User user) {
         if (userService.registerUser(user)) {
             return new ApiResponse("success");
@@ -45,13 +44,20 @@ public class AuthController {
     }
 
     @PostMapping("/auth/login")
-    public ResponseEntity<LoginResponse> handler2(@RequestBody User user) throws Exception {
+    public ResponseEntity<?> handler2(@RequestBody User user) {
         try {
             this.authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
-        } catch (Exception e) {
+        } catch (BadCredentialsException e) {
             e.printStackTrace();
-            throw new Exception("Bad credentials");
+            return new ResponseEntity<>(new ApiResponse("Invalid email or password"), HttpStatus.UNAUTHORIZED);
+        } catch (EntityNotFoundException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(new ApiResponse("User not found with email: " + user.getEmail()),
+                    HttpStatus.UNAUTHORIZED);
+        } catch (AuthenticationException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(new ApiResponse("Authentication failed"), HttpStatus.UNAUTHORIZED);
         }
 
         UserDetails userDetails = this.userService.loadUserByUsername(user.getEmail());
@@ -69,7 +75,8 @@ public class AuthController {
             loginResponse.setToken(token);
             return new ResponseEntity<>(loginResponse, HttpStatus.OK);
         } else {
-            throw new EntityNotFoundException("User not found with email: " + user.getEmail());
+            return new ResponseEntity<>(new ApiResponse("User not found with email: " + user.getEmail()),
+                    HttpStatus.UNAUTHORIZED);
         }
     }
 
