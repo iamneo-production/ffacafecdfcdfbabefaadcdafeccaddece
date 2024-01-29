@@ -53,14 +53,14 @@ public class AuthController {
                     .authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
         } catch (BadCredentialsException e) {
             e.printStackTrace();
-            return new ResponseEntity<>(new ApiResponse("Invalid email or password"), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(new ApiResponse("Invalid email or password"), HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             e.printStackTrace();
             return new ResponseEntity<>(new ApiResponse("User not found with email: " + user.getEmail()),
-                    HttpStatus.UNAUTHORIZED);
+                    HttpStatus.OK);
         } catch (AuthenticationException e) {
             e.printStackTrace();
-            return new ResponseEntity<>(new ApiResponse("Authentication failed"), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(new ApiResponse("Authentication failed"), HttpStatus.OK);
         }
 
         UserDetails userDetails = this.userService.loadUserByUsername(user.getEmail());
@@ -79,7 +79,7 @@ public class AuthController {
             return new ResponseEntity<>(loginResponse, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(new ApiResponse("User not found with email: " + user.getEmail()),
-                    HttpStatus.UNAUTHORIZED);
+                    HttpStatus.OK);
         }
     }
 
